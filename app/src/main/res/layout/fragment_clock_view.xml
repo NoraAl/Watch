@@ -5,12 +5,18 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:paddingTop="30dp"
+
+
     tools:context="edu.umsl.watch.ClockView">
     <TextView
         android:id="@+id/clockView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="idsjdsjklj" />
+        android:textSize="40dp"
+        android:textColor="@color/colorPrimary"
+        android:text="00:00.000" />
 
 </android.support.constraint.ConstraintLayout>
