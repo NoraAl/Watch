@@ -29,29 +29,7 @@ class ClockView : Fragment() {
     }
 
     fun setClock(tick: String){
-
         clock?.text = tick//.toString()
     }
-
-//    class Clock: AsyncTask<Unit, Unit, Unit>(){
-//        override fun doInBackground(vararg params: Unit?) {
-//
-//        }
-//
-//        override fun onPreExecute() {
-//            super.onPreExecute()
-//        }
-//
-//        override fun onCancelled() {
-//            super.onCancelled()
-//        }
-//
-//        override fun onProgressUpdate(vararg values: Unit?) {
-//            super.onProgressUpdate(*values)
-//        }
-//
-//
-//
-//    }
 
 }
