@@ -81,7 +81,7 @@ class LapsView : Fragment() {
                 holder = view.tag as LapsHolder
             }
 
-            holder.idView.text = lapsList?.get(position)
+            holder.idView.text = "Lap "+(position+1)
             holder.timeView.text = lapsList?.get(position)
 
             return view

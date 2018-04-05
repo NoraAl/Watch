@@ -31,6 +31,7 @@
             android:name="edu.umsl.watch.LapsView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4" />
+            android:layout_weight="0.4"
+            />
     </LinearLayout>
 </FrameLayout>

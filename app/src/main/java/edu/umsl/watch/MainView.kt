@@ -20,6 +20,8 @@ class MainView : Activity(), ButtonsView.Action {
     private var total: Long = 0
     private var timePaused: Long = 0
     private var pausedFlag: Boolean = false
+    private var currentLap: Int = 0
+    private var lapStartTime: Long = 0
 
     //private var model: LapsModel? = null
 
@@ -77,6 +79,25 @@ class MainView : Activity(), ButtonsView.Action {
 
     override fun lap() {
         //lapsView?.addItem("pppp")
+        if (lapStartTime.toInt() == 0){// first time lap
+            lapStartTime = startTime
+        }
+        currentLap = (SystemClock.uptimeMillis() - lapStartTime).toInt()
+
+
+        var temp = (currentLap / 1000).toInt()
+        val minutes = temp / 60
+        val seconds = temp % 60
+        val millis = (currentLap % 1000).toInt()
+
+        var text = minutes.toString()
+
+        text += ":" +seconds.toString()
+        text += "." + millis.toString()
+
+        lapsView?.addItem(text)
+
+        lapStartTime = SystemClock.uptimeMillis()
 
     }
 
