@@ -5,6 +5,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
 
+val START_TIME = "START_TIME"
+val TOTAL = "TOTAL"
+val PAUSED_TIME = "PAUSED_TIME"
+val LAPS_START_TIME = "LAPS_START_TIME"
+val PAUSED_FLAG = "PAUSED_FLAG"
+val TIME_PAUSED = "TIME_PAUSED"
+
 
 class MainView : Activity(), ButtonsView.Action {
     // three main views
@@ -23,18 +30,48 @@ class MainView : Activity(), ButtonsView.Action {
     private var currentLap: Int = 0
     private var lapStartTime: Long = 0
 
-    //private var model: LapsModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_view)
 
-        clockView = fragmentManager.findFragmentById(R.id.clockFragment) as ClockView
-        buttonView  = fragmentManager.findFragmentById(R.id.buttonsFragment) as ButtonsView
-        lapsView = fragmentManager.findFragmentById(R.id.lapsFragment) as LapsView
 
-        buttonView?.delegate = this
+        if (savedInstanceState != null) {
+            startTime = savedInstanceState.getLong(START_TIME)
+            totalPasuedTime = savedInstanceState.getLong(PAUSED_TIME)
+            lapStartTime = savedInstanceState.getLong(LAPS_START_TIME)
+            total = savedInstanceState.getLong(TOTAL)
+            pausedFlag = savedInstanceState?.getBoolean(PAUSED_FLAG)
+            timePaused = savedInstanceState?.getLong(TIME_PAUSED)
 
+            clockView = fragmentManager.findFragmentById(R.id.clockFragment) as ClockView
+            lapsView = fragmentManager.findFragmentById(R.id.lapsFragment) as LapsView
+            buttonView = fragmentManager.findFragmentById(R.id.buttonsFragment) as ButtonsView
+            buttonView?.delegate = this
+
+            buttonView?.savedState()
+            handler = Handler()
+
+        } else {
+            clockView = fragmentManager.findFragmentById(R.id.clockFragment) as ClockView
+            lapsView = fragmentManager.findFragmentById(R.id.lapsFragment) as LapsView
+            buttonView = fragmentManager.findFragmentById(R.id.buttonsFragment) as ButtonsView
+            buttonView?.delegate = this
+        }
+
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        handler?.removeCallbacks(runnable)
+        handler = null
+        outState?.putLong(START_TIME, startTime)
+        outState?.putLong(TOTAL, total)
+        outState?.putLong(PAUSED_TIME, totalPasuedTime)
+        outState?.putLong(LAPS_START_TIME, lapStartTime)
+        outState?.putBoolean(PAUSED_FLAG, pausedFlag)
+        outState?.putLong(TIME_PAUSED, timePaused)
     }
 
     private var runnable = object : Runnable {
@@ -50,7 +87,7 @@ class MainView : Activity(), ButtonsView.Action {
 
             var text = minutes.toString()
 
-            text += ":" +seconds.toString()
+            text += ":" + seconds.toString()
             text += "." + millis.toString()
 
             clockView?.setClock(text)
@@ -58,12 +95,13 @@ class MainView : Activity(), ButtonsView.Action {
         }
     }
 
-    override fun start( isFirstTime: Boolean) {
+    override fun start(isFirstTime: Boolean) {
         if (isFirstTime)
             startTime = SystemClock.uptimeMillis()
         else {
             val currentTime = SystemClock.uptimeMillis()
-            totalPasuedTime += ( currentTime - timePaused)
+            if (timePaused > 0) // not from rotation
+                totalPasuedTime += (currentTime - timePaused)
         }
         if (handler == null)
             handler = Handler()
@@ -78,8 +116,7 @@ class MainView : Activity(), ButtonsView.Action {
     }
 
     override fun lap() {
-        //lapsView?.addItem("pppp")
-        if (lapStartTime.toInt() == 0){// first time lap
+        if (lapStartTime.toInt() == 0) {// first time lap
             lapStartTime = startTime
         }
         currentLap = (SystemClock.uptimeMillis() - lapStartTime).toInt()
@@ -92,7 +129,7 @@ class MainView : Activity(), ButtonsView.Action {
 
         var text = minutes.toString()
 
-        text += ":" +seconds.toString()
+        text += ":" + seconds.toString()
         text += "." + millis.toString()
 
         lapsView?.addItem(text)

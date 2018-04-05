@@ -9,7 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 
 import android.widget.TextView
-import org.json.JSONArray
+
+val TEXT = "TEXT"
 
 class ClockView : Fragment() {
 
@@ -20,16 +21,20 @@ class ClockView : Fragment() {
         val view = inflater?.inflate(R.layout.fragment_clock_view, container, false)
         clock = view?.findViewById(R.id.clockView)
 
-        clock?.setOnClickListener {
-            clock?.text = "clicked"
-            //delegate?.fetchCarData()
+        if (savedInstanceState != null){
+            clock?.text = savedInstanceState?.getString(TEXT)
         }
 
         return view
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putString(TEXT, clock?.text?.toString())
+    }
+
     fun setClock(tick: String){
-        clock?.text = tick//.toString()
+        clock?.text = tick
     }
 
 }

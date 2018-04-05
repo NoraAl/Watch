@@ -13,30 +13,32 @@ import android.widget.ListView
 
 import android.widget.TextView
 
+val MODEL = "MODEL"
+
 
 class LapsView : Fragment() {
     private var lapsList: ListView? = null
-
-
-    //var model: LapsModel? = null
-
     var laps: ArrayList<String>? = null
     var adapter: LapsAdapter ? = null
 
-    private var textView: TextView? = null
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_laps_view, container, false)
         lapsList = view?.findViewById<ListView>(R.id.listView)
 
-        laps = ArrayList<String>(  0)
+        if (savedInstanceState == null)
+            laps = ArrayList<String>(  0)
+        else
+            laps = savedInstanceState.getSerializable("MODEL") as ArrayList<String>
 
-        //adapter = ArrayAdapter(view?.context, android.R.layout.simple_list_item_1, laps)
         adapter = LapsAdapter(view?.context!!, laps!!)
         lapsList?.adapter = adapter
 
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putSerializable(MODEL, laps)
     }
 
 
@@ -50,8 +52,11 @@ class LapsView : Fragment() {
     }
 
 
-    //-----------
-
+    /****************
+    *
+    * Adapter
+    *
+    ****************/
     inner class LapsAdapter : BaseAdapter {
 
         private var lapsList : ArrayList<String>? = null
@@ -106,6 +111,11 @@ class LapsView : Fragment() {
         }
     }
 
+    /****************
+     *
+     * Holder
+     *
+     ****************/
     private class LapsHolder(view: View?) {
         val idView: TextView = view?.findViewById(R.id.lapsId) as TextView
         val timeView: TextView = view?.findViewById(R.id.timeString) as TextView

@@ -1,20 +1,16 @@
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:paddingTop="30dp"
-    android:maxHeight="400dp"
 
+    android:maxHeight="200dp"
+    android:paddingTop="20dp"
     >
 
 
     <ListView
-    android:id="@+id/listView"
-        android:layout_weight="1"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </android.support.constraint.ConstraintLayout>
