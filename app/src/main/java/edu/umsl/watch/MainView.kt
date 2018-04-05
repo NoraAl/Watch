@@ -21,7 +21,7 @@ class MainView : Activity(), ButtonsView.Action {
     private var timePaused: Long = 0
     private var pausedFlag: Boolean = false
 
-    private var model: LapsModel? = null
+    //private var model: LapsModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +30,6 @@ class MainView : Activity(), ButtonsView.Action {
         clockView = fragmentManager.findFragmentById(R.id.clockFragment) as ClockView
         buttonView  = fragmentManager.findFragmentById(R.id.buttonsFragment) as ButtonsView
         lapsView = fragmentManager.findFragmentById(R.id.lapsFragment) as LapsView
-
-        model = LapsModel()
-        model?.addLap("3u234")
-        model?.addLap("3829")
-
-
-
 
         buttonView?.delegate = this
 
@@ -66,7 +59,6 @@ class MainView : Activity(), ButtonsView.Action {
     override fun start( isFirstTime: Boolean) {
         if (isFirstTime)
             startTime = SystemClock.uptimeMillis()
-
         else {
             val currentTime = SystemClock.uptimeMillis()
             totalPasuedTime += ( currentTime - timePaused)
@@ -77,7 +69,6 @@ class MainView : Activity(), ButtonsView.Action {
     }
 
     override fun pause() {
-        lapsView?.addItem("pppp")
         handler!!.removeCallbacks(runnable)
         handler = null
         timePaused = SystemClock.uptimeMillis()
@@ -85,7 +76,8 @@ class MainView : Activity(), ButtonsView.Action {
     }
 
     override fun lap() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //lapsView?.addItem("pppp")
+
     }
 
     override fun reset() {
@@ -95,11 +87,12 @@ class MainView : Activity(), ButtonsView.Action {
         total = 0
         timePaused = 0
         totalPasuedTime = 0
+        lapsView?.clear()
         clockView?.setClock("00:00.000")
     }
 
     override fun stop() {
-        lapsView?.addItem("aaaa")
+
         handler?.removeCallbacks(runnable)
         handler = null
     }

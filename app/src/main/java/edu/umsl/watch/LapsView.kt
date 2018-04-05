@@ -16,7 +16,13 @@ import android.widget.TextView
 
 class LapsView : Fragment() {
     private var lapsList: ListView? = null
-    var model: LapsModel? = null
+
+
+    //var model: LapsModel? = null
+
+    var laps: ArrayList<String>? = null
+    var adapter: LapsAdapter ? = null
+
     private var textView: TextView? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -24,36 +30,40 @@ class LapsView : Fragment() {
         val view = inflater!!.inflate(R.layout.fragment_laps_view, container, false)
         lapsList = view?.findViewById<ListView>(R.id.listView)
 
-        model = LapsModel()
-        model?.addLap("djdslakjlkd")
-        model?.addLap("djsjd")
+        laps = ArrayList<String>(  0)
 
-        //lapsList?.adapter = LapsAdapter(view?.context!!, model!!)
-        lapsList?.adapter = ArrayAdapter(view?.context, android.R.layout.simple_list_item_1, model?.getLapList())
-                //ArrayAdapter(view?.context,R.layout.layout, model?.getLapList())
+        //adapter = ArrayAdapter(view?.context, android.R.layout.simple_list_item_1, laps)
+        adapter = LapsAdapter(view?.context!!, laps!!)
+        lapsList?.adapter = adapter
 
         return view
     }
 
-    fun addItem(item: String){
-        model?.addLap(item)
 
+    fun addItem(item: String){
+        adapter?.add(item)
     }
+
+    fun clear(){
+        laps = ArrayList<String>(  0)
+        adapter?.clear()
+    }
+
 
     //-----------
 
     inner class LapsAdapter : BaseAdapter {
 
-        private var lapsList : LapsModel? = null
+        private var lapsList : ArrayList<String>? = null
         private var context: Context? = null
 
-        constructor(context: Context, notesList: LapsModel) : super() {
+        constructor(context: Context, notesList: ArrayList<String>) : super() {
             this.context = context
             this.lapsList = notesList
         }
 
-        override fun getItem(position: Int): Any {
-            return lapsList?.getLapList()!![position]
+        override fun getItem(position: Int): String? {
+            return lapsList?.get(position)
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
@@ -71,8 +81,8 @@ class LapsView : Fragment() {
                 holder = view.tag as LapsHolder
             }
 
-            holder.idView.text = lapsList?.getLapAt(position)
-            holder.timeView.text = lapsList?.getLapAt(position)
+            holder.idView.text = lapsList?.get(position)
+            holder.timeView.text = lapsList?.get(position)
 
             return view
         }
@@ -82,7 +92,17 @@ class LapsView : Fragment() {
         }
 
         override fun getCount(): Int {
-            return lapsList?.getlapsCount() ?: 0
+            return lapsList?.size ?: 0
+        }
+
+        fun add (lap: String){
+            lapsList?.add(lap)
+            notifyDataSetChanged()
+        }
+
+        fun clear(){
+            lapsList?.clear()
+            notifyDataSetChanged()
         }
     }
 

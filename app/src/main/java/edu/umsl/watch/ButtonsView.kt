@@ -60,7 +60,7 @@ class ButtonsView : Fragment() {
                 }
                 State.TICKING ->{ //ticking but pause is pressed
                     state = State.PAUSED
-                    startButton?.text = "Restart"
+                    startButton?.text = "Start"
                     lapButton?.text = "Reset"
                     delegate?.pause()
                 }
@@ -74,7 +74,7 @@ class ButtonsView : Fragment() {
         lapButton?.setOnClickListener {
             when (state){
                 State.TICKING ->{ //ticking but lap is pressed
-                    //TODO: lap
+                    delegate?.lap()
                 }
                 State.PAUSED -> { // Reset is pressed
                     delegate?.reset()
